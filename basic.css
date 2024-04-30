@@ -1,0 +1,77 @@
+/* Resets to ensure styles are consistent across browsers */
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden; /* Prevents scrollbars from appearing */
+    background-color: #fcfcfc; /* Light gray background color */
+    font-family: Arial, sans-serif; /* Ensures a modern font is used */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Styling for the viewport container that houses the flipbook */
+.flipbook-viewport {
+    position: relative;
+    width: 100%;
+    max-width: 1844px; /* Match the flipbook width for better center alignment */
+
+ /* Light background for the viewport */
+    display: flex;
+    justify-content: center;
+    align-items: center; /* Centers the flipbook horizontally and vertically */
+}
+
+/* General container styles for additional alignment */
+.container {
+    position: relative;
+    width: fit-content;
+    height: fit-content;
+    overflow: hidden; /* Hides anything outside of the container */
+}
+
+/* Styling the container for zoom controls for aesthetic appearance */
+
+
+/* Additional styling for the input range to enhance appearance */
+input[type="range"] {
+    width: 300px; /* Width of the slider */
+    cursor: pointer; /* Cursor indicates interactivity */
+    margin: 10px 0; /* Margin for spacing around the slider */
+}
+
+/* Specific styles for the flipbook */
+.flipbook {
+ /* Adds depth with a subtle shadow */
+ /* Ensures a clean background for pages */
+    transform-origin: center center; /* Centers the transformation origin */
+}
+
+/* Page-specific styles to ensure backgrounds fit and are responsive */
+.flipbook div {
+    background-size: cover; /* Ensures background images cover the div */
+    background-position: center; /* Centers background images */
+    width: 461px; /* Half the width of the flipbook */
+    height: 1080px; /* Matches the flipbook height */
+}
+
+/* Enhance the first image in the flipbook */
+.flipbook img:first-of-type {
+    width: 100%; /* Adjusted to ensure the image fills the container correctly */
+    height: auto; /* Maintains aspect ratio */
+    display: block; /* Removes bottom space/gap */
+}
+.zoom-controls {
+    text-align: center;
+    width: 50%;
+    margin-bottom: 10px;
+}
+
+input[type="range"] {
+    width: 300px;
+    cursor: pointer;
+}
+
