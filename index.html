@@ -1,24 +1,17 @@
 <!doctype html>
-<!--[if lt IE 7 ]> <html lang="en" class="ie6"> <![endif]-->
-<!--[if IE 7 ]>    <html lang="en" class="ie7"> <![endif]-->
-<!--[if IE 8 ]>    <html lang="en" class="ie8"> <![endif]-->
-<!--[if IE 9 ]>    <html lang="en" class="ie9"> <![endif]-->
-<!--[if !IE]><!--> <html lang="en"> <!--<![endif]-->
+<html lang="en">
 <head>
 <meta name="viewport" content="width = 1050, user-scalable = no" />
-<script type="text/javascript" src="../../extras/jquery.min.1.7.js"></script>
-<script type="text/javascript" src="../../extras/modernizr.2.5.3.min.js"></script>
+<script type="text/javascript" src="Extras/jquery-ui.min.js"></script>
+<script type="text/javascript" src="Extras/jquery.min.js"></script>
+<link rel="stylesheet" href="CSS/basic.css">
 </head>
 <body>
-	<div class="zoom-controls">
-		<label for="zoom-slider">Zoom:</label>
-		<input type="range" id="zoom-slider" min="1" max="3" step="0.1" value="1">
-	</div>
-	<div id="pannable-content">
+
 <div class="flipbook-viewport">
 	<div class="container">
 		<div class="flipbook">
-			<img src="https://i.ibb.co/cYmQwS0/Link.png" alt="Link" border="0">
+			<div style="background-image:url(pages/1.jpg)"></div>
 			<div style="background-image:url(pages/2.jpg)"></div>
 			<div style="background-image:url(pages/3.jpg)"></div>
 			<div style="background-image:url(pages/4.jpg)"></div>
@@ -33,83 +26,126 @@
 		</div>
 	</div>
 </div>
-</div>
 
 
 <script type="text/javascript">
-	$('img').on('dragstart', function(event) {
-    event.preventDefault();
+
+function loadApp() {
+
+	// Create the flipbook
+
+	$('.flipbook').turn({
+			// Width
+
+			width:922,
+			
+			// Height
+
+			height:600,
+
+			// Elevation
+
+			elevation: 50,
+			
+			// Enable gradients
+
+			gradients: true,
+			
+			// Auto center this flipbook
+
+			autoCenter: true
+
+	});
+}
+
+// Load turn.js
+
+loadApp()
+/*
+ * Basic sample
+*/
+
+function addPage(page, book) {
+
+var id, pages = book.turn('pages');
+
+// Create a new element for this page
+var element = $('<div />', {});
+
+// Add the page to the flipbook
+if (book.turn('addPage', element, page)) {
+
+	// Add the initial HTML
+	// It will contain a loader indicator and a gradient
+	element.html('<div class="gradient"></div><div class="loader"></div>');
+
+	// Load the page
+	loadPage(page, element);
+}
+
+}
+
+function loadPage(page, pageElement) {
+
+// Create an image element
+
+var img = $('<img />');
+
+img.on('mousedown', function(e) {
+	e.preventDefault();
 });
 
-$(document).ready(function() {
-    var isPanning = false,
-        startCoords = {},
-        transformMatrix;
+img.on('load', function() {
+	
+	// Set the size
+	$(this).css({width: '100%', height: '100%'});
 
-    function loadApp() {
-        $('.flipbook').turn({
-            width: 922,
-            height: 600,
-            elevation: 50,
-            gradients: true,
-            autoCenter: true
-        });
-    }
+	// Add the image to the page after loaded
 
-    yepnope({
-        test: Modernizr.csstransforms,
-        yep: ['../../lib/turn.js'],
-        nope: ['../../lib/turn.html4.min.js'],
-        both: ['css/basic.css'],
-        complete: loadApp
-    });
+	$(this).appendTo(pageElement);
 
-    $('#zoom-slider').on('input change', function() {
-        var zoomLevel = $(this).val();
-        $('.flipbook').css({
-            transform: 'scale(' + zoomLevel + ')',
-            transformOrigin: 'center center'
-        });
-    });
-
-    $('#pannable-content').on('mousedown touchstart', function(e) {
-        isPanning = true;
-        var event = e.type === 'touchstart' ? e.originalEvent.touches[0] : e;
-        startCoords = {
-            x: event.pageX,
-            y: event.pageY
-        };
-        transformMatrix = parseTransform($('.flipbook').css('transform'));
-    });
-
-    $(window).on('mousemove touchmove', function(e) {
-        if (isPanning) {
-            var event = e.type === 'touchmove' ? e.originalEvent.touches[0] : e;
-            var deltaX = event.pageX - startCoords.x;
-            var deltaY = event.pageY - startCoords.y;
-
-            $('.flipbook').css('transform', 'translate(' + (transformMatrix.x + deltaX) + 'px, ' + (transformMatrix.y + deltaY) + 'px) scale(' + ($('#zoom-slider').val()) + ')');
-        }
-    });
-
-    $(window).on('mouseup touchend', function(e) {
-        isPanning = false;
-    });
-
-    function parseTransform(transformString) {
-        var matrix = transformString.match(/matrix\(([^)]+)\)/);
-        if (matrix) {
-            var values = matrix[1].split(',');
-            return {
-                x: parseFloat(values[4].trim()),
-                y: parseFloat(values[5].trim())
-            };
-        }
-        return {x: 0, y: 0}; // Default to no translation if no transform is found
-    }
+	// Remove the loader indicator
+	
+	pageElement.find('.loader').remove();
 });
-</script>
 
+// Load the page
+
+img.attr('src', 'pages/' +  page + '.jpg');
+
+}
+
+
+function loadLargePage(page, pageElement) {
+
+var img = $('<img />');
+
+img.on('load', function() {
+
+	var prevImg = pageElement.find('img');
+	$(this).css({width: '100%', height: '100%'});
+	$(this).appendTo(pageElement);
+	prevImg.remove();
+	
+});
+
+// Loadnew page
+
+img.attr('src', 'pages/' +  page + '-large.jpg');
+}
+
+
+function loadSmallPage(page, pageElement) {
+
+var img = pageElement.find('img');
+
+img.css({width: '100%', height: '100%'});
+
+img.off('load');
+// Loadnew page
+
+img.attr('src', 'pages/' +  page + '.jpg');
+}
 
 </script>
 
